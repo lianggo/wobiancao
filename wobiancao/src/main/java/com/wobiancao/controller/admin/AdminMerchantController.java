@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ import com.wobiancao.protocol.ajax.AjaxFailResponse;
 import com.wobiancao.protocol.ajax.AjaxSuccessResponse;
 import com.wobiancao.repository.MerchantRepository;
 import com.wobiancao.utils.FileUtils;
+import com.wobiancao.utils.IdUtils;
 
 @Controller
 @RequestMapping(value = "/admin/merchant")
@@ -58,18 +61,18 @@ public class AdminMerchantController {
 			if (merchant == null) {
 				return new AjaxFailResponse("商户不存在").toString();
 			}
-			
-//			String fileExtension = FileUtils.getFileExtension(logoFile.getOriginalFilename());
-//			String filename = "merchant_" + id + "." + fileExtension;
-//			boolean saveSuccess = saveLogoFile(filename, logoFile);
-//			if (!saveSuccess) {
-//				return new AjaxFailResponse("图片保存出错").toString();
-//			}
-			
+
+			// String fileExtension =
+			// FileUtils.getFileExtension(logoFile.getOriginalFilename());
+			// String filename = "merchant_" + id + "." + fileExtension;
+			// boolean saveSuccess = saveLogoFile(filename, logoFile);
+			// if (!saveSuccess) {
+			// return new AjaxFailResponse("图片保存出错").toString();
+			// }
+
 			merchant.setName(input.getName());
 			merchant.setDescription(input.getDescription());
 			merchant.setLogo(input.getLogo());
-			merchant.setStatus(input.getStatus());
 			merchantRepository.save(merchant);
 		} else {
 			merchantRepository.save(input);
@@ -77,9 +80,28 @@ public class AdminMerchantController {
 
 		return new AjaxSuccessResponse().toString();
 	}
-	
-	private boolean saveLogoFile(String filename, MultipartFile logoFile) {
-		String uploadLocation = "resource/upload/";
+
+	@RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
+	@ResponseBody
+	public String uploadImage(HttpServletRequest request, @RequestParam("imageFile") MultipartFile imageFile) {
+		String filedir = "/img/shop_pic/";
+		String uploadLocation = request.getRealPath(filedir);
+		String id = IdUtils.generateRandomId(16);
+		String fileExtension = FileUtils.getFileExtension(imageFile.getOriginalFilename());
+		String filename = id + "." + fileExtension;
+		boolean saveSuccess = saveImageFile(uploadLocation, filename, imageFile);
+		if (!saveSuccess) {
+			return new AjaxFailResponse("图片保存出错").toString();
+		}
+		return "{\"picUrl\": \"" + filedir + filename + "\"}";
+	}
+
+	private boolean saveImageFile(String uploadLocation, String filename, MultipartFile logoFile) {
+		File uploadDir = new File(uploadLocation);
+		if (!uploadDir.exists()) {
+			uploadDir.mkdirs();
+		}
+		
 		String path = uploadLocation + filename;
 		try {
 			logoFile.transferTo(new File(path));

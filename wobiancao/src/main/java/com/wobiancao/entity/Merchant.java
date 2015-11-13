@@ -10,25 +10,25 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "t_merchant")
+@Table(name = "shop")
 public class Merchant extends AbstractEntity {
 
 	@Column
 	private String name;
 
-	@Column
+	@Column(name = "desp")
 	private String description;
 
-	@Column
+	@Column(name = "pic_url")
 	private String logo;
 
-	@Column
-	@Enumerated(EnumType.ORDINAL)
-	private StatusType status;
-
-	public enum StatusType {
-		DISABLED, ENABLED
-	}
+//	@Column
+//	@Enumerated(EnumType.ORDINAL)
+//	private StatusType status;
+//
+//	public enum StatusType {
+//		DISABLED, ENABLED
+//	}
 
 	@OneToMany(mappedBy = "merchant")
 	private List<Coupon> coupons;
@@ -57,14 +57,6 @@ public class Merchant extends AbstractEntity {
 		this.logo = logo;
 	}
 
-	public StatusType getStatus() {
-		return status;
-	}
-
-	public void setStatus(StatusType status) {
-		this.status = status;
-	}
-
 	public List<Coupon> getCoupons() {
 		return coupons;
 	}
@@ -72,5 +64,6 @@ public class Merchant extends AbstractEntity {
 	public void setCoupons(List<Coupon> coupons) {
 		this.coupons = coupons;
 	}
+
 
 }

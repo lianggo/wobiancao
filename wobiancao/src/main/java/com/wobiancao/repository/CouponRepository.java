@@ -1,5 +1,6 @@
 package com.wobiancao.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -12,8 +13,20 @@ public interface CouponRepository extends PagingAndSortingRepository<Coupon, Lon
 
 	Page<Coupon> findByMerchantId(Long merchantId, Pageable pageable);
 
-	List<Coupon> findByOrderByLikeCountDesc();
+//	List<Coupon> findByOrderByLikeCountDesc();
 	
-	List<Coupon> findByCategoryIdOrderByLikeCountDesc(Long categoryId);
+//	List<Coupon> findByCategoryIdOrderByLikeCountDesc(Long categoryId);
+	
+	List<Coupon> findByOrderByGetCountDesc();
+	
+	List<Coupon> findByCategoryIdOrderByGetCountDesc(Long categoryId);
+	
+	List<Coupon> findByCategoryIdAndTagLikeOrderByGetCountDesc(Long categoryId, String tag);
+	
+	List<Coupon> findByTimeBeginLessThanAndTimeEndGreaterThanOrderByGetCountDesc(Date begin, Date end);
+	
+	List<Coupon> findByTimeBeginLessThanAndTimeEndGreaterThanAndCategoryIdOrderByGetCountDesc(Date begin, Date end, Long categoryId);
+	
+	List<Coupon> findByTimeBeginLessThanAndTimeEndGreaterThanAndCategoryIdAndTagLikeOrderByGetCountDesc(Date begin, Date end, Long categoryId, String tag);
 	
 }

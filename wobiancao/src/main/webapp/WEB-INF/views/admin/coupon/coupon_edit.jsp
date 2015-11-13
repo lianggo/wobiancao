@@ -12,11 +12,11 @@ $('#editModal_saveButton').on('click', function () {
 	var slogan = $('#editModal input[name=slogan]').val();
 	var description = $('#editModal input[name=description]').val();
 	var categoryId = $('#editModal select[name=categoryId]').val();
-	var likeCount = $('#editModal input[name=likeCount]').val();
+	var getCount = $('#editModal input[name=getCount]').val();
+	var tag = $('#editModal input[name=tag]').val();
 	var thirdUrl = $('#editModal input[name=thirdUrl]').val();
 	var timeBegin = $('#editModal input[name=timeBegin]').val();
 	var timeEnd = $('#editModal input[name=timeEnd]').val();
-	var status = $('#editModal select[name=status]').val();
 	
 	$.ajax({
 		type: 'POST',
@@ -29,11 +29,11 @@ $('#editModal_saveButton').on('click', function () {
 				slogan : slogan,
 				description : description,
 				categoryId : categoryId,
-				likeCount : likeCount,
+				getCount : getCount,
+				tag : tag,
 				thirdUrl : thirdUrl,
 				timeBegin : timeBegin,
 				timeEnd : timeEnd,
-				status : status
 			},
 			dataType : 'json',
 			beforeSend : function() {
@@ -111,8 +111,12 @@ $('#editModal_saveButton').on('click', function () {
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="likeCount">喜欢数</label>
-						<input id="likeCount" name="likeCount" value="${item.likeCount}" type="text" class="form-control">
+						<label for="getCount">领取数</label>
+						<input id="getCount" name="getCount" value="${item.getCount}" type="text" class="form-control">
+					</div>
+					<div class="form-group">
+						<label for="tag">标签</label>
+						<input id="tag" name="tag" value="${item.tag}" type="text" class="form-control">
 					</div>
 					<div class="form-group">
 						<label for="thirdUrl">外部链接</label>
@@ -125,13 +129,6 @@ $('#editModal_saveButton').on('click', function () {
 					<div class="form-group">
 						<label for="timeEnd">结束时间</label>
 						<input id="timeEnd" name="timeEnd" value="<fmt:formatDate value="${item.timeEnd}" pattern="yyyy-MM-dd"/>" type="date" class="form-control">
-					</div>
-					<div class="form-group">
-						<label for="status">状态</label>
-						<select id="status" name="status" class="form-control">
-							<option value="ENABLED" ${item.status == "ENABLED" ? "selected" : ""}>可用</option>
-							<option value="DISABLED" ${item.status == "DISABLED" ? "selected" : ""}>不可用</option>
-						</select>
 					</div>
 				</div>
 			</div>

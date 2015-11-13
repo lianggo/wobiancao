@@ -43,13 +43,18 @@ public class MerchantController {
 		model.addAttribute("merchant", merchant);
 		model.addAttribute("isFollowed", isFollowed);
 		
-		Map<Long, Coupon> couponsLikedMap = new HashMap<Long, Coupon>();
-		for (Coupon c : customer.getCouponsLiked()) {
-			couponsLikedMap.put(c.getId(), c);
+//		Map<Long, Coupon> couponsLikedMap = new HashMap<Long, Coupon>();
+//		for (Coupon c : customer.getCouponsLiked()) {
+//			couponsLikedMap.put(c.getId(), c);
+//		}
+//		model.addAttribute("couponsLikedMap", couponsLikedMap); // 当前用户喜欢的优惠券
+		Map<Long, Coupon> couponsGotMap = new HashMap<Long, Coupon>();
+		for (Coupon c : customer.getCouponsGot()) {
+			couponsGotMap.put(c.getId(), c);
 		}
-		model.addAttribute("couponsLikedMap", couponsLikedMap); // 当前用户喜欢的优惠券
+		model.addAttribute("couponsGotMap", couponsGotMap); // 当前用户领过的优惠券
 		
-		return "merchant/merchant_details";
+		return "merchant/merchant_details2";
 	}
 	
 	@RequestMapping(value = "/follow")

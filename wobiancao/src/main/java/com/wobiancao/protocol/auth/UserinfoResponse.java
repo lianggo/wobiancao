@@ -24,6 +24,8 @@ public class UserinfoResponse {
 	private String city;
 
 	private String country;
+	
+	private String language;
 
 	@JsonProperty("headimgurl")
 	private String avatar;
@@ -95,6 +97,14 @@ public class UserinfoResponse {
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 
 	public String getAvatar() {

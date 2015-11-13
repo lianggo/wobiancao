@@ -113,15 +113,21 @@ public class AdminCouponController {
 			coupon.setSlogan(input.getSlogan());
 			coupon.setDescription(input.getDescription());
 			coupon.setCategoryId(input.getCategoryId());
-			coupon.setLikeCount(input.getLikeCount());
+//			coupon.setLikeCount(input.getLikeCount());
+			coupon.setTag(input.getTag());
 			coupon.setThirdUrl(input.getThirdUrl());
 			coupon.setTimeBegin(input.getTimeBegin());
 			coupon.setTimeEnd(input.getTimeEnd());
-			coupon.setStatus(input.getStatus());
 			couponRepository.save(coupon);
 		} else {
 			Merchant merchant = merchantRepository.findOne(merchantId);
 			input.setMerchant(merchant);
+//			if (input.getLikeCount() == null) {
+//				input.setLikeCount(0);
+//			}
+			if (input.getGetCount() == null) {
+				input.setGetCount(0);
+			}
 			couponRepository.save(input);
 		}
 

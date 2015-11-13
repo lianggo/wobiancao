@@ -1,5 +1,6 @@
 package com.wobiancao.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -7,50 +8,45 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "t_customer")
+@Table(name = "users")
 public class Customer extends AbstractEntity {
 
-	@Column
+	@Column(name = "open_id")
 	private String openId;
 
-	@Column
+	@Column(name = "username")
 	private String nickname;
 
-	@Column
-	private String sex;
-
-	@Column
-	private String country;
-
-	@Column
-	private String province;
-
-	@Column
-	private String city;
-
-	@Column
+	@Column(name = "users_pic_url")
 	private String avatar;
+	
+	@Column(name = "remote_system")
+	private String remoteSystem;
+	
+	@Column(name = "user_info_remote")
+	private String userinfo;
+	
+	@Column(name = "create_datetime")
+	private Date createDate;
 
-	@Column
-	private String accessToken;
+	@Column(name = "last_logged_in")
+	private Date lastLoginDate;
 
-	@Column
-	private String refreshToken;
-
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "t_customer_merchant_follow", joinColumns = { @JoinColumn(name = "customer_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "merchant_id", referencedColumnName = "id") })
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "user_follow_shop", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "shop_id", referencedColumnName = "id") })
 	private List<Merchant> merchantsFollowed;
 
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "t_customer_coupon_like", joinColumns = { @JoinColumn(name = "customer_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "coupon_id", referencedColumnName = "id") })
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "user_like_coupon", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "coupon_id", referencedColumnName = "id") })
 	private List<Coupon> couponsLiked;
 	
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "t_customer_coupon_get", joinColumns = { @JoinColumn(name = "customer_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "coupon_id", referencedColumnName = "id") })
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(name = "user_has_coupon", joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = { @JoinColumn(name = "coupon_id", referencedColumnName = "id") })
 	private List<Coupon> couponsGot;
 
 	public String getOpenId() {
@@ -69,38 +65,6 @@ public class Customer extends AbstractEntity {
 		this.nickname = nickname;
 	}
 
-	public String getSex() {
-		return sex;
-	}
-
-	public void setSex(String sex) {
-		this.sex = sex;
-	}
-
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
-	}
-
-	public String getProvince() {
-		return province;
-	}
-
-	public void setProvince(String province) {
-		this.province = province;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
 	public String getAvatar() {
 		return avatar;
 	}
@@ -109,20 +73,36 @@ public class Customer extends AbstractEntity {
 		this.avatar = avatar;
 	}
 
-	public String getAccessToken() {
-		return accessToken;
+	public String getRemoteSystem() {
+		return remoteSystem;
 	}
 
-	public void setAccessToken(String accessToken) {
-		this.accessToken = accessToken;
+	public void setRemoteSystem(String remoteSystem) {
+		this.remoteSystem = remoteSystem;
 	}
 
-	public String getRefreshToken() {
-		return refreshToken;
+	public String getUserinfo() {
+		return userinfo;
 	}
 
-	public void setRefreshToken(String refreshToken) {
-		this.refreshToken = refreshToken;
+	public void setUserinfo(String userinfo) {
+		this.userinfo = userinfo;
+	}
+
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
+	public Date getLastLoginDate() {
+		return lastLoginDate;
+	}
+
+	public void setLastLoginDate(Date lastLoginDate) {
+		this.lastLoginDate = lastLoginDate;
 	}
 
 	public List<Merchant> getMerchantsFollowed() {

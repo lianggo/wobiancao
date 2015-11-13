@@ -5,12 +5,13 @@
 
 <c:set var="currentModule" value="admin"/>
 <c:set var="currentFunction" value="merchant"/>
+<script type="text/javascript" src="<%=request.getContextPath()%>/resources/js/ajaxfileupload.js"></script>
 <script type="text/javascript">
 $('#editModal_saveButton').on('click', function () {
 	var name = $('#editModal input[name=name]').val();
 	var description = $('#editModal input[name=description]').val();
 	var logo = $('#editModal input[name=logo]').val();
-	var status = $('#editModal input[name=status]').val();
+// 	var status = $('#editModal input[name=status]').val();
 	
 	
 	$.ajax({
@@ -22,7 +23,7 @@ $('#editModal_saveButton').on('click', function () {
 				name : name,
 				description : description,
 				logo : logo,
-				status : status
+// 				status : status
 			},
 			dataType : 'json',
 			beforeSend : function() {
@@ -52,6 +53,24 @@ $('#editModal_saveButton').on('click', function () {
 			}
 		});
 	});
+	
+function ajaxFileUpload() {
+	$.ajaxFileUpload({
+		url : '${pageContext.request.contextPath}/${currentModule}/${currentFunction}/uploadImage',
+		secureuri : false,
+		fileElementId : 'imageFile',
+		dataType : 'json',
+		data : {name : $("#name").val()},
+		success : function(data, status) {
+			$('#viewImg').attr('src', data.picUrl);
+			$('#logo').val(data.picUrl);
+		},
+		error : function(data, status, e) {
+			alert('上传出错');
+		}
+	})
+	return false;
+}
 </script>
 
 <div id="editModal" class="modal">
@@ -81,12 +100,15 @@ $('#editModal_saveButton').on('click', function () {
 					</div>
 					<div class="form-group">
 						<label for="logo">logo</label>
-						<input id="logo" name="logo" value="${item.logo}" type="text" class="form-control">
+						<input id="logo" name="logo" value="${item.logo}" type="hidden" class="form-control">
+						<img id="viewImg" src="${item.logo}" style="width:350px">
+						<input id="imageFile" type="file" size="45" name="imageFile" class="input">
+						<button class="button" onclick="ajaxFileUpload()">上传</button>
 					</div>
-					<div class="form-group">
-						<label for="status">状态</label>
-						<input id="status" name="status" value="${item.status}" type="text" class="form-control">
-					</div>
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="status">状态</label> -->
+<%-- 						<input id="status" name="status" value="${item.status}" type="text" class="form-control"> --%>
+<!-- 					</div> -->
 				</div>
 			</div>
 			<div class="modal-footer">

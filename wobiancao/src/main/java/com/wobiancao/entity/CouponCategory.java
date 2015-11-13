@@ -5,16 +5,16 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "t_coupon_category")
+@Table(name = "coupons_category")
 public class CouponCategory extends AbstractEntity {
 
-	@Column
+	@Column(name = "name_cn")
 	private String name;
 
-	@Column
+	@Column(name = "description")
 	private String description;
 
-	@Column
+	@Column(name = "pic_url")
 	private String picUrl;
 
 	public String getName() {

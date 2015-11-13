@@ -32,32 +32,20 @@
 							</div>
 						</c:when>
 						<c:otherwise>
-							<table class="table table-bordered">
+							<table class="table table-bordered" style="">
 								<tr>
 									<td>序号</td>
 									<td>openid</td>
 									<td>头像</td>
 									<td>昵称</td>
-									<td>性别</td>
-									<td>国家</td>
-									<td>省份</td>
-									<td>城市</td>
-									<td>access_token</td>
-									<td>refresh_token</td>
 									<td>操作</td>
 								</tr>
 								<c:forEach items="${page.content}" var="item" varStatus="itemStatus">
 									<tr>
 										<td>${itemStatus.count}</td>
 										<td>${item.openId}</td>
-										<td><img src="${item.avatar}"></img></td>
+										<td><img src="${item.avatar}" style="width:50px"></img></td>
 										<td>${item.nickname}</td>
-										<td>${item.sex}</td>
-										<td>${item.country}</td>
-										<td>${item.province}</td>
-										<td>${item.city}</td>
-										<td>${item.accessToken}</td>
-										<td>${item.refreshToken}</td>
 										<td>
 											<button type="button" class="btn btn-primary btn-sm" onclick="remoteModal('${pageContext.request.contextPath}/${currentModule}/${currentFunction}/edit?id=${item.id}')">编辑</button>
 											<button type="button" class="btn btn-primary btn-sm" onclick="remoteModal('${pageContext.request.contextPath}/${currentModule}/${currentFunction}/merchantsFollowed?id=${item.id}')">关注的商户</button>

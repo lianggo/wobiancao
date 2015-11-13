@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "t_coupon")
+@Table(name = "coupon")
 public class Coupon extends AbstractEntity {
 
 	@Column
@@ -20,36 +20,42 @@ public class Coupon extends AbstractEntity {
 	@Column
 	private String slogan;
 
-	@Column
+	@Column(name = "desp")
 	private String description;
 
-	@Column
+	@Column(name = "coupon_category")
 	private Long categoryId;
 
-	@Column
-	@Enumerated(EnumType.ORDINAL)
-	private StatusType status;
+//	@Column
+//	@Enumerated(EnumType.ORDINAL)
+//	private StatusType status;
+//
+//	public enum StatusType {
+//		DISABLED, ENABLED
+//	}
 
-	public enum StatusType {
-		DISABLED, ENABLED
-	}
-
-	@Column
-	private Integer likeCount;
+//	@Column(name = "like")
+//	private Integer likeCount = 0;
 	
-	@Column
+	@Column(name = "has_count")
+	private Integer getCount = 0;
+	
+	@Column(name = "third_url")
 	private String thirdUrl;
 
-	@Column
+	@Column(name = "datetime_begin")
 	private Date timeBegin;
 
-	@Column
+	@Column(name = "datetime_end")
 	private Date timeEnd;
 
 	@ManyToOne
-	@JoinColumn(name = "merchant_id")
+	@JoinColumn(name = "shop_id")
 	private Merchant merchant;
-
+	
+	@Column
+	private String tag;
+	
 	public String getName() {
 		return name;
 	}
@@ -82,20 +88,28 @@ public class Coupon extends AbstractEntity {
 		this.categoryId = categoryId;
 	}
 
-	public StatusType getStatus() {
-		return status;
+//	public StatusType getStatus() {
+//		return status;
+//	}
+//
+//	public void setStatus(StatusType status) {
+//		this.status = status;
+//	}
+
+//	public Integer getLikeCount() {
+//		return likeCount;
+//	}
+//
+//	public void setLikeCount(Integer likeCount) {
+//		this.likeCount = likeCount;
+//	}
+
+	public Integer getGetCount() {
+		return getCount;
 	}
 
-	public void setStatus(StatusType status) {
-		this.status = status;
-	}
-
-	public Integer getLikeCount() {
-		return likeCount;
-	}
-
-	public void setLikeCount(Integer likeCount) {
-		this.likeCount = likeCount;
+	public void setGetCount(Integer getCount) {
+		this.getCount = getCount;
 	}
 
 	public String getThirdUrl() {
@@ -128,6 +142,14 @@ public class Coupon extends AbstractEntity {
 
 	public void setMerchant(Merchant merchant) {
 		this.merchant = merchant;
+	}
+
+	public String getTag() {
+		return tag;
+	}
+
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 }

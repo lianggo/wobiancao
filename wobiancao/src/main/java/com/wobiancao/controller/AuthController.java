@@ -1,11 +1,17 @@
 package com.wobiancao.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Enumeration;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.http.HttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,14 +31,13 @@ import com.wobiancao.utils.JsonUtils;
 @Controller
 @RequestMapping(value = "/auth")
 public class AuthController {
-
 	private static final String WECHAT_AUTHORIZE_URL = "https://open.weixin.qq.com/connect/oauth2/authorize";
 	private static final String WECHAT_QRCONNECT_URL = "https://open.weixin.qq.com/connect/qrconnect";
 	private static final String WECHAT_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
 	private static final String WECHAT_USERINFO_URL = "https://api.weixin.qq.com/sns/userinfo";
-	private static final String APP_ID = "wxbdc5610cc59c1631";
-	private static final String SECRET = "";
-	private static final String REDIRECT_URI = "https://passport.yhd.com/wechat/callback.do";
+	private static final String APP_ID = "wx81ea63d48d76cb00";
+	private static final String SECRET = "5dc18a69089ca059c9726427fe0acbce";
+	private static final String REDIRECT_URI = "http%3A%2F%2Fwbc.izhuomi.com%2Fauth%2Fcallback";
 	private static final String SCOPE_BASE = "snsapi_base";
 	private static final String SCOPE_USERINFO = "snsapi_userinfo";
 	private static final String RESPONSE_TYPE = "code";
@@ -50,13 +55,14 @@ public class AuthController {
 	
 	@RequestMapping(value = "/baseLogin")
 	public String baseLogin(HttpSession session) {
-		Customer customer = (Customer) session.getAttribute(CUSTOMER_ATTRIBUTE);
-		if (customer == null) {
-			String wechat = getWechat(SCOPE_BASE);
-			return "redirect:" + wechat;
-		} else {
-			return "redirect:/home";
-		}
+//		Customer customer = (Customer) session.getAttribute(CUSTOMER_ATTRIBUTE);
+//		if (customer == null) {
+//			String wechat = getWechat(SCOPE_BASE);
+//			return "redirect:" + wechat;
+//		} else {
+//			return "redirect:/home";
+//		}
+		return userinfoLogin(session);
 	}
 	
 	@RequestMapping(value = "/userinfoLogin")
@@ -77,8 +83,26 @@ public class AuthController {
 	}
 	
 	@RequestMapping(value = "/callback")
-	public String callback(@RequestParam String code, @RequestParam(required=false) String state, HttpSession session) {
+	public String callback(HttpServletRequest request, @RequestParam(required=false) String code, @RequestParam(required=false) String state, HttpSession session) {
+		
+		Enumeration<String> parameterNames = request.getParameterNames();
+		System.out.println("====parameter====");
+		while (parameterNames.hasMoreElements()) {
+			String name = parameterNames.nextElement();
+			System.out.println(name + "=" + request.getParameter(name));
+		}
+		
+		System.out.println("callback code=" + code);
 		TokenResponse tokenResponse = getToken(code);
+		System.out.println("====token====");
+		System.out.println("accessToken" + tokenResponse.getAccessToken());
+		System.out.println("errorMessage" + tokenResponse.getErrorMessage());
+		System.out.println("expiresIn" + tokenResponse.getExpiresIn());
+		System.out.println("openId" + tokenResponse.getOpenId());
+		System.out.println("refreshToken" + tokenResponse.getRefreshToken());
+		System.out.println("scope" + tokenResponse.getScope());
+		System.out.println("unionId" + tokenResponse.getUnionId());
+		System.out.println("errorCode" + tokenResponse.getErrorCode());
 		if (tokenResponse.getErrorCode() == null) { // OAuth成功
 			String openId = tokenResponse.getOpenId();
 			Customer customer = customerRepository.findOneByOpenId(openId);
@@ -86,19 +110,24 @@ public class AuthController {
 			if (scope.equals(SCOPE_BASE)) {
 				// 拉取用户信息需要snsapi_userinfo，从数据库中取得
 				if (customer == null) { // 数据库中不存在记录，需要进行授权的登录
+					System.out.println("customer not in DB!!");
+					System.out.println("redirect:/auth/userinfoLogin");
 					return "redirect:/auth/userinfoLogin";
 				}
-				String accessToken = customer.getAccessToken();
+				String accessToken = tokenResponse.getAccessToken();
 				UserinfoResponse userinfoResponse = getUserinfo(openId, accessToken);
+				System.out.println("====base:userinfo====");
+				System.out.println("openId" + userinfoResponse.getOpenId());
+				System.out.println("avatar" + userinfoResponse.getAvatar());
+				System.out.println("errorMessage" + userinfoResponse.getErrorMessage());
+				System.out.println("nickname" + userinfoResponse.getNickname());
+				System.out.println("errorCode" + userinfoResponse.getErrorCode());
 				if (userinfoResponse.getErrorCode() == null) {
 					syncUserinfo(userinfoResponse, customer);
 					customerRepository.save(customer);
 					session.setAttribute("customer", customer);
-				} else if (userinfoResponse.getErrorCode().equals(ERROR_CODE_ACCESS_TOKEN_EXPIRES)) { // 之前获取的access_token过期了
-					// TODO 尝试refresh_token
-					return "redirect:/auth/userinfoLogin";
 				} else {
-					return "error";
+					return "redirect:/auth/userinfoLogin";
 				}
 			} else if (scope.equals(SCOPE_USERINFO)) {
 				if (customer == null) {
@@ -108,15 +137,14 @@ public class AuthController {
 				String accessToken = tokenResponse.getAccessToken();
 				UserinfoResponse userinfoResponse = getUserinfo(openId, accessToken);
 				if (userinfoResponse.getErrorCode() == null) {
-					syncToken(tokenResponse, customer); // 把scope为snsapi_userinfo的token也同步一下
 					syncUserinfo(userinfoResponse, customer);
 					customerRepository.save(customer);
 					session.setAttribute("customer", customer);
 				} else {
-					return "error";
+					return "redirect:/auth/userinfoLogin";
 				}
 			} else {
-				return "error";
+				return "error"; //scope invalid
 			}
 			return "redirect:/home";
 		} else {
@@ -137,42 +165,48 @@ public class AuthController {
 	}
 	
 	private TokenResponse getToken(String code) {
-//		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(WECHAT_TOKEN_URL);
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(WECHAT_TOKEN_URL);
 //		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080/auth/commonFail");
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080/auth/tokenSuccess");
+//		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080/auth/tokenSuccess");
 		uriBuilder.queryParam("appid", APP_ID);
 		uriBuilder.queryParam("secret", SECRET);
 		uriBuilder.queryParam("code", code);
 		uriBuilder.queryParam("grant_type", GRANT_TYPE);
 		URI uri = uriBuilder.build().toUri();
-		TokenResponse response = restTemplate.getForObject(uri, TokenResponse.class);
+//		TokenResponse response = restTemplate.getForObject(uri, TokenResponse.class);
+		ResponseEntity<String> entity = restTemplate.getForEntity(uri, String.class);
+		String body = entity.getBody();
+		TokenResponse response = JsonUtils.jsonToObject(body, TokenResponse.class);
 		return response;
 	}
 	
-	private void syncToken(TokenResponse response, Customer customer) {
-		customer.setAccessToken(response.getAccessToken());
-		customer.setRefreshToken(response.getRefreshToken());
-	}
-	
 	private UserinfoResponse getUserinfo(String openId, String accessToken) {
-//		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(WECHAT_USERINFO_URL);
+		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(WECHAT_USERINFO_URL);
 //		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080/auth/commonFail");
-		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080/auth/userinfoSuccess");
+//		UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080/auth/userinfoSuccess");
 		uriBuilder.queryParam("access_token", accessToken);
 		uriBuilder.queryParam("openid", openId);
 		uriBuilder.queryParam("lang", LANG);
 		URI uri = uriBuilder.build().toUri();
-		UserinfoResponse response= restTemplate.getForObject(uri, UserinfoResponse.class);
+		ResponseEntity<String> entity = restTemplate.getForEntity(uri, String.class);
+		String body = entity.getBody();
+		try {
+			body = new String(body.getBytes("ISO-8859-1"), "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		UserinfoResponse response= JsonUtils.jsonToObject(body, UserinfoResponse.class);
 		return response;
 	}
 	
 	private void syncUserinfo(UserinfoResponse response, Customer customer) {
 		customer.setNickname(response.getNickname());
 		customer.setAvatar(response.getAvatar());
-		customer.setSex(response.getSex());
-		customer.setCountry(response.getCountry());
-		customer.setProvince(response.getProvince());
-		customer.setCity(response.getCity());
+		customer.setRemoteSystem("wechat");
+		customer.setCreateDate(new Date());
+		customer.setLastLoginDate(new Date());
+		customer.setUserinfo("");
 	}
 	
 	@RequestMapping(value = "/commonFail")

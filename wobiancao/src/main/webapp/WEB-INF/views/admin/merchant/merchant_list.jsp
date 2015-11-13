@@ -38,7 +38,7 @@
 									<td>名称</td>
 									<td>描述</td>
 									<td>logo</td>
-									<td>状态</td>
+<!-- 									<td>状态</td> -->
 									<td>操作</td>
 								</tr>
 								<c:forEach items="${page.content}" var="item" varStatus="itemStatus">
@@ -47,7 +47,7 @@
 										<td>${item.name}</td>
 										<td>${item.description}</td>
 										<td>${item.logo}</td>
-										<td>${item.status}</td>
+<%-- 										<td>${item.status}</td> --%>
 										<td>
 											<button type="button" class="btn btn-primary btn-sm" onclick="remoteModal('${pageContext.request.contextPath}/${currentModule}/${currentFunction}/edit?id=${item.id}')">编辑</button>
 											<a href="${pageContext.request.contextPath}/${currentModule}/coupon/list?merchantId=${item.id}" class="btn btn-primary btn-sm">管理优惠券</a>

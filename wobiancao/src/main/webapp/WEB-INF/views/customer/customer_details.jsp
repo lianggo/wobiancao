@@ -69,9 +69,7 @@
 										<ul class="nav">
 											<li style="display: block; position: relative" class="usermain-list-li"><a href="/customer/couponsGot">
 													<div style="display: inline-block" class="usermain-list-item-icon col-md-2 col-sm-2 col-xs-2">
-														<span>
-															<i class="fa fa-money" style="font-size: 30px"></i>
-														</span>
+														<img class="coupon-icon" src="/resources/image/customer_pic/save_icon.png">
 													</div>
 													<div style="display: inline-block" class="user-coupon-list-shop-name col-md-7 col-sm-7 col-xs-7">
 														<span class="">节省</span>
@@ -80,14 +78,12 @@
 														<span class="">${customer.couponsGot.size()}次</span>
 													</div>
 													<div style="display: inline-block" class="user-coupon-list-coupon-desp col-md-1 col-sm-1 col-xs-1">
-														<span class=""> &gt;</span>
+														<img class="coupon-icon-arrow" src="/resources/image/customer_pic/right_arrow.png">
 													</div>
 												</a></li>
 											<li style="display: block; position: relative" class="usermain-list-li"><a href="/customer/merchantFollowed">
 													<div style="display: inline-block" class="usermain-list-item-icon col-md-2 col-sm-2 col-xs-2">
-														<span>
-															<i class="fa fa-plus-square" style="font-size: 30px"></i>
-														</span>
+														<img class="coupon-icon" src="/resources/image/customer_pic/follow_icon.png">
 													</div>
 													<div style="display: inline-block" class="user-coupon-list-shop-name col-md-7 col-sm-7 col-xs-7">
 														<span class="">关注</span>
@@ -96,7 +92,7 @@
 														<span class=""></span>
 													</div>
 													<div style="display: inline-block" class="user-coupon-list-coupon-desp col-md-1 col-sm-1 col-xs-1">
-														<span class=""> &gt;</span>
+														<img class="coupon-icon-arrow" src="/resources/image/customer_pic/right_arrow.png">
 													</div>
 												</a></li>
 										</ul>

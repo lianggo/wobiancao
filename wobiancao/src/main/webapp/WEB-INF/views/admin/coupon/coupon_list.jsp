@@ -39,10 +39,9 @@
 									<td>名称</td>
 									<td>商户</td>
 									<td>类别</td>
-									<td>喜欢数</td>
+									<td>领取数</td>
 									<td>开始时间</td>
 									<td>结束时间</td>
-									<td>状态</td>
 									<td>操作</td>
 								</tr>
 								<c:forEach items="${page.content}" var="item" varStatus="itemStatus">
@@ -52,10 +51,9 @@
 										<td>${item.name}</td>
 										<td>${item.merchant.name}</td>
 										<td>${couponCategoryMap[item.categoryId].name}</td>
-										<td>${item.likeCount}</td>
+										<td>${item.getCount}</td>
 										<td><fmt:formatDate value="${item.timeBegin}" pattern="yyyy-MM-dd"/></td>
 										<td><fmt:formatDate value="${item.timeEnd}" pattern="yyyy-MM-dd"/></td>
-										<td>${item.status}</td>
 										<td>
 											<button type="button" class="btn btn-primary btn-sm" onclick="remoteModal('${pageContext.request.contextPath}/${currentModule}/${currentFunction}/edit?id=${item.id}')">编辑</button>
 											<button type="button" class="btn btn-primary btn-sm" onclick="remoteModal('${pageContext.request.contextPath}/${currentModule}/${currentFunction}/confirm?id=${item.id}')">删除</button>

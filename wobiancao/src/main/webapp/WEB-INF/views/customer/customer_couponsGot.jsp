@@ -9,7 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<title>: 窝边草:</title>
+<title>窝边草</title>
 <link href="/favicon.ico" type="image/x-icon" rel="icon">
 <link href="/favicon.ico" type="image/x-icon" rel="shortcut icon">
 <link rel="stylesheet" type="text/css" href="/resources/css/components-rounded.css">
