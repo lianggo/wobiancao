@@ -226,7 +226,7 @@ public class AuthController {
 		response.setExpiresIn(7200L);
 		response.setRefreshToken("REFRESH_TOKEN");
 		response.setOpenId("OPENID");
-		response.setScope(SCOPE_BASE);
+		response.setScope(SCOPE_USERINFO);
 		response.setUnionId("UNIONID");
 		return JsonUtils.objectToJson(response);
 	}
