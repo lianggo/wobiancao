@@ -84,25 +84,7 @@ public class AuthController {
 	
 	@RequestMapping(value = "/callback")
 	public String callback(HttpServletRequest request, @RequestParam(required=false) String code, @RequestParam(required=false) String state, HttpSession session) {
-		
-		Enumeration<String> parameterNames = request.getParameterNames();
-		System.out.println("====parameter====");
-		while (parameterNames.hasMoreElements()) {
-			String name = parameterNames.nextElement();
-			System.out.println(name + "=" + request.getParameter(name));
-		}
-		
-		System.out.println("callback code=" + code);
 		TokenResponse tokenResponse = getToken(code);
-		System.out.println("====token====");
-		System.out.println("accessToken" + tokenResponse.getAccessToken());
-		System.out.println("errorMessage" + tokenResponse.getErrorMessage());
-		System.out.println("expiresIn" + tokenResponse.getExpiresIn());
-		System.out.println("openId" + tokenResponse.getOpenId());
-		System.out.println("refreshToken" + tokenResponse.getRefreshToken());
-		System.out.println("scope" + tokenResponse.getScope());
-		System.out.println("unionId" + tokenResponse.getUnionId());
-		System.out.println("errorCode" + tokenResponse.getErrorCode());
 		if (tokenResponse.getErrorCode() == null) { // OAuth成功
 			String openId = tokenResponse.getOpenId();
 			Customer customer = customerRepository.findOneByOpenId(openId);
@@ -110,18 +92,10 @@ public class AuthController {
 			if (scope.equals(SCOPE_BASE)) {
 				// 拉取用户信息需要snsapi_userinfo，从数据库中取得
 				if (customer == null) { // 数据库中不存在记录，需要进行授权的登录
-					System.out.println("customer not in DB!!");
-					System.out.println("redirect:/auth/userinfoLogin");
 					return "redirect:/auth/userinfoLogin";
 				}
 				String accessToken = tokenResponse.getAccessToken();
 				UserinfoResponse userinfoResponse = getUserinfo(openId, accessToken);
-				System.out.println("====base:userinfo====");
-				System.out.println("openId" + userinfoResponse.getOpenId());
-				System.out.println("avatar" + userinfoResponse.getAvatar());
-				System.out.println("errorMessage" + userinfoResponse.getErrorMessage());
-				System.out.println("nickname" + userinfoResponse.getNickname());
-				System.out.println("errorCode" + userinfoResponse.getErrorCode());
 				if (userinfoResponse.getErrorCode() == null) {
 					syncUserinfo(userinfoResponse, customer);
 					customerRepository.save(customer);

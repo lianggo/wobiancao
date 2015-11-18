@@ -2,6 +2,8 @@ package com.wobiancao.controller.admin;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,7 +40,12 @@ public class AdminCustomerController {
 	private CouponRepository couponRepository;
 
 	@RequestMapping(value = "/list")
-	public String list(Pageable pageable, Model model) {
+	public String list(Pageable pageable, Model model, HttpSession session) {
+		Object admin = session.getAttribute("admin");
+		if (admin == null) {
+			return "redirect:/admin/login";
+		}
+		
 		Page<Customer> page = customerRepository.findAll(pageable);
 		model.addAttribute("page", page);
 		return String.format("admin/%s/%s_list", CURRENT_FUNCTION, CURRENT_FUNCTION);

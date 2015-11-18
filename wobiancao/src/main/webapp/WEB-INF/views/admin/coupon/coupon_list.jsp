@@ -20,6 +20,17 @@
 			</div>
 			<div class="col-md-10">
 				<h1 class="page-header">优惠券管理 <small>${merchant.name}</small></h1>
+				<div style="height: 50px">
+					<form id="searchForm" method="get" action="${pageContext.request.contextPath}/${currentModule}/${currentFunction}/list" class="form-inline">
+						<label for="categoryId">选择一个类别：</label>
+						<select id="categoryId" name="categoryId" class="form-control">
+							<c:forEach items="${couponCategories}" var="couponCategory">
+								<option value="${couponCategory.id}" ${item.categoryId == couponCategory.id ? "selected" : ""}>${couponCategory.name}</option>
+							</c:forEach>
+						</select>
+						<button type="submit" class="form-control btn btn-primary">搜索</button>
+					</form>
+				</div>
 				<div style="margin-bottom:10px">
 					<button type="button" class="btn btn-primary" onclick="remoteModal('${pageContext.request.contextPath}/${currentModule}/${currentFunction}/edit?merchantId=${merchant.id}')">添加优惠券</button>
 				</div>

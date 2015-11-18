@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,7 +39,12 @@ public class AdminMerchantController {
 	private MerchantRepository merchantRepository;
 
 	@RequestMapping(value = "/list")
-	public String list(Pageable pageable, Model model) {
+	public String list(Pageable pageable, Model model, HttpSession session) {
+		Object admin = session.getAttribute("admin");
+		if (admin == null) {
+			return "redirect:/admin/login";
+		}
+		
 		Page<Merchant> page = merchantRepository.findAll(pageable);
 		model.addAttribute("page", page);
 		return String.format("admin/%s/%s_list", CURRENT_FUNCTION, CURRENT_FUNCTION);

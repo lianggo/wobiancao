@@ -12,10 +12,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -57,9 +60,20 @@ public class AdminCouponController {
 	}
 
 	@RequestMapping(value = "/list")
-	public String list(@RequestParam(required = false) Long merchantId, Pageable pageable, Model model) {
+	public String list(@RequestParam(required = false) Long merchantId, Pageable pageable, @RequestParam(required = false) Long categoryId, Model model, HttpSession session) {
+		Object admin = session.getAttribute("admin");
+		if (admin == null) {
+			return "redirect:/admin/login";
+		}
+		
 		if (merchantId == null) {
-			Page<Coupon> page = couponRepository.findAll(pageable);
+			Page<Coupon> page = null;
+			if (categoryId != null) {
+				page = couponRepository.findByCategoryId(categoryId, pageable);
+				model.addAttribute("categoryId", categoryId);
+			} else {
+				page = couponRepository.findAll(pageable);
+			}
 			model.addAttribute("page", page);
 		} else {
 			Merchant merchant = merchantRepository.findOne(merchantId);
@@ -72,6 +86,7 @@ public class AdminCouponController {
 		for (CouponCategory c : couponCategories) {
 			couponCategoryMap.put(c.getId(), c);
 		}
+		model.addAttribute("couponCategories", couponCategories);
 		model.addAttribute("couponCategoryMap", couponCategoryMap);
 
 		return String.format("admin/%s/%s_list", CURRENT_FUNCTION, CURRENT_FUNCTION);

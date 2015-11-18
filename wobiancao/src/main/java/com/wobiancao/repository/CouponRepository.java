@@ -19,6 +19,8 @@ public interface CouponRepository extends PagingAndSortingRepository<Coupon, Lon
 	
 	List<Coupon> findByOrderByGetCountDesc();
 	
+	Page<Coupon> findByCategoryId(Long categoryId, Pageable pageable);
+	
 	List<Coupon> findByCategoryIdOrderByGetCountDesc(Long categoryId);
 	
 	List<Coupon> findByCategoryIdAndTagLikeOrderByGetCountDesc(Long categoryId, String tag);
