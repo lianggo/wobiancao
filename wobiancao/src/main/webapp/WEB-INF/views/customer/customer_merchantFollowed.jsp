@@ -74,7 +74,10 @@
 								<div class="wbc-shop-item-cube-container">
 									<c:forEach items="${customer.merchantsFollowed}" var="merchant">
 										<a href="/merchant/${merchant.id}">
-											<div class="square bg" style="background-image: url( ${merchant.logo} )"></div>
+											<div class="square" style="text-align: center">
+												<div class="content text-center" style="height:100%;width:100%;font-size:12px">
+												<img class="rs" src="${merchant.logo} "><span style="color:#000">${merchant.name}</span></div>
+											</div>
 										</a>
 									</c:forEach>
 								</div>
