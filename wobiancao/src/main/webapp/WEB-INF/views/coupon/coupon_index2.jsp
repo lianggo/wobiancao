@@ -91,7 +91,7 @@
 									</a>
 									<div class="coupon-geted-heart">
 										<div id="coupon_id_like_${coupon.id}" style="width: 100%; text-align: center;">
-											<span style="font-size: 9px; color: #797979">${couponsGotMap[coupon.id] != null ? '已领' : '未领'}</span>
+											<span style="font-size: 9px; color: #797979">${couponsGotMap[coupon.id] != null ? '已领' : '已领'}</span>
 											<span style="font-size: 11px; color: #e84b3c">${coupon.getCount}</span>
 										</div>
 									</div>
