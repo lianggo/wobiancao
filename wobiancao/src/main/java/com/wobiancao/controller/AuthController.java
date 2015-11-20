@@ -35,9 +35,9 @@ public class AuthController {
 	private static final String WECHAT_QRCONNECT_URL = "https://open.weixin.qq.com/connect/qrconnect";
 	private static final String WECHAT_TOKEN_URL = "https://api.weixin.qq.com/sns/oauth2/access_token";
 	private static final String WECHAT_USERINFO_URL = "https://api.weixin.qq.com/sns/userinfo";
-	private static final String APP_ID = "wx81ea63d48d76cb00";
-	private static final String SECRET = "5dc18a69089ca059c9726427fe0acbce";
-	private static final String REDIRECT_URI = "http%3A%2F%2Fwbc.izhuomi.com%2Fauth%2Fcallback";
+	private static final String APP_ID = "wx2c61beed6c10d04e";
+	private static final String SECRET = "7a9833ffeb91cd30fe70408b6df4000b";
+	private static final String REDIRECT_URI = "http%3A%2F%2Fwbc.szunicom.com%2Fauth%2Fcallback";
 	private static final String SCOPE_BASE = "snsapi_base";
 	private static final String SCOPE_USERINFO = "snsapi_userinfo";
 	private static final String RESPONSE_TYPE = "code";
