@@ -76,7 +76,9 @@
 										<a href="/merchant/${merchant.id}">
 											<div class="square" style="text-align: center">
 												<div class="content text-center" style="height:100%;width:100%;font-size:12px">
-												<img class="rs" src="${merchant.logo} "><span style="color:#000">${merchant.name}</span></div>
+													<img class="rs" src="${merchant.logo} ">
+													<div style="color:#000">${merchant.name}</div>
+												</div>
 											</div>
 										</a>
 									</c:forEach>
