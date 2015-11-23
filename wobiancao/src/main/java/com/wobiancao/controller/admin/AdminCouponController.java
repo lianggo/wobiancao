@@ -88,6 +88,11 @@ public class AdminCouponController {
 		}
 		model.addAttribute("couponCategories", couponCategories);
 		model.addAttribute("couponCategoryMap", couponCategoryMap);
+		
+		if (categoryId != null) {
+			model.addAttribute("currentCategoryId", categoryId);
+			model.addAttribute("searchParamsUrl", "&categoryId=" + categoryId);
+		}
 
 		return String.format("admin/%s/%s_list", CURRENT_FUNCTION, CURRENT_FUNCTION);
 	}
@@ -129,6 +134,7 @@ public class AdminCouponController {
 			coupon.setDescription(input.getDescription());
 			coupon.setCategoryId(input.getCategoryId());
 //			coupon.setLikeCount(input.getLikeCount());
+			coupon.setGetCount(input.getGetCount());
 			coupon.setTag(input.getTag());
 			coupon.setThirdUrl(input.getThirdUrl());
 			coupon.setTimeBegin(input.getTimeBegin());

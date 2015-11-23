@@ -40,7 +40,7 @@ public class Coupon extends AbstractEntity {
 	@Column(name = "has_count")
 	private Integer getCount = 0;
 	
-	@Column(name = "third_url")
+	@Column(name = "third_url", length = 1000)
 	private String thirdUrl;
 
 	@Column(name = "datetime_begin")

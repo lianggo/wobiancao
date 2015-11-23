@@ -25,7 +25,7 @@
 						<label for="categoryId">选择一个类别：</label>
 						<select id="categoryId" name="categoryId" class="form-control">
 							<c:forEach items="${couponCategories}" var="couponCategory">
-								<option value="${couponCategory.id}" ${item.categoryId == couponCategory.id ? "selected" : ""}>${couponCategory.name}</option>
+								<option value="${couponCategory.id}" ${currentCategoryId == couponCategory.id ? "selected" : ""}>${couponCategory.name}</option>
 							</c:forEach>
 						</select>
 						<button type="submit" class="form-control btn btn-primary">搜索</button>
