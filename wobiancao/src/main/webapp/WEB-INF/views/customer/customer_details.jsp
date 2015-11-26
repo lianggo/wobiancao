@@ -50,6 +50,7 @@
 	text-align: left;
 }
 </style>
+<%@ include file="/WEB-INF/views/header.jsp"%>
 </head>
 <body>
 	<div class="page-container">
