@@ -60,7 +60,7 @@ public class AdminCouponController {
 	}
 
 	@RequestMapping(value = "/list")
-	public String list(@RequestParam(required = false) Long merchantId, Pageable pageable, @RequestParam(required = false) Long categoryId, Model model, HttpSession session) {
+	public String list(@RequestParam(required = false) Long merchantId, Pageable pageable, @RequestParam(required = false) Long categoryId, @RequestParam(required = false) Boolean hideExpire, Model model, HttpSession session) {
 		Object admin = session.getAttribute("admin");
 		if (admin == null) {
 			return "redirect:/admin/login";
@@ -69,10 +69,19 @@ public class AdminCouponController {
 		if (merchantId == null) {
 			Page<Coupon> page = null;
 			if (categoryId != null) {
-				page = couponRepository.findByCategoryId(categoryId, pageable);
+				if (hideExpire != null) {
+					page = couponRepository.findByTimeBeginLessThanAndTimeEndGreaterThanAndCategoryId(new Date(), new Date(), categoryId, pageable);
+				} else {
+					page = couponRepository.findByCategoryId(categoryId, pageable);
+				}
 				model.addAttribute("categoryId", categoryId);
+				model.addAttribute("currentCategoryId", categoryId);
 			} else {
-				page = couponRepository.findAll(pageable);
+				if (hideExpire != null) {
+					page = couponRepository.findByTimeBeginLessThanAndTimeEndGreaterThan(new Date(), new Date(), pageable);
+				} else {
+					page = couponRepository.findAll(pageable);
+				}
 			}
 			model.addAttribute("page", page);
 		} else {
@@ -89,10 +98,15 @@ public class AdminCouponController {
 		model.addAttribute("couponCategories", couponCategories);
 		model.addAttribute("couponCategoryMap", couponCategoryMap);
 		
+		String searchParamsUrl = "";
 		if (categoryId != null) {
-			model.addAttribute("currentCategoryId", categoryId);
-			model.addAttribute("searchParamsUrl", "&categoryId=" + categoryId);
+			searchParamsUrl += "&categoryId=" + categoryId;
 		}
+		if (hideExpire != null) {
+			model.addAttribute("hideExpire", true);
+			searchParamsUrl += "&hideExpire=true";
+		}
+		model.addAttribute("searchParamsUrl", searchParamsUrl);
 
 		return String.format("admin/%s/%s_list", CURRENT_FUNCTION, CURRENT_FUNCTION);
 	}

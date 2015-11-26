@@ -1,5 +1,7 @@
 package com.wobiancao.controller;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,15 @@ public class MerchantController {
 		customer = customerRepository.findOne(customer.getId()); // 从数据库中取得最新的用户信息
 		
 		Merchant merchant = merchantRepository.findOne(id);
+		List<Coupon> coupons = merchant.getCoupons();
+		List<Coupon> newCoupons = new ArrayList<Coupon>();
+		Date now = new Date();
+		for (Coupon c : coupons) {
+			if (c.getTimeBegin().before(now) && c.getTimeEnd().after(now)) {
+				newCoupons.add(c);
+			}
+		}
+		merchant.setCoupons(newCoupons);
 		boolean isFollowed = customer.getMerchantsFollowed().contains(merchant);
 		model.addAttribute("merchant", merchant);
 		model.addAttribute("isFollowed", isFollowed);

@@ -31,4 +31,8 @@ public interface CouponRepository extends PagingAndSortingRepository<Coupon, Lon
 	
 	List<Coupon> findByTimeBeginLessThanAndTimeEndGreaterThanAndCategoryIdAndTagLikeOrderByGetCountDesc(Date begin, Date end, Long categoryId, String tag);
 	
+	Page<Coupon> findByTimeBeginLessThanAndTimeEndGreaterThanAndCategoryId(Date begin, Date end, Long categoryId, Pageable pageable);
+	
+	Page<Coupon> findByTimeBeginLessThanAndTimeEndGreaterThan(Date begin, Date end, Pageable pageable);
+	
 }

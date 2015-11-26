@@ -28,6 +28,8 @@
 								<option value="${couponCategory.id}" ${currentCategoryId == couponCategory.id ? "selected" : ""}>${couponCategory.name}</option>
 							</c:forEach>
 						</select>
+						<label for="hideExpire">隐藏过期的优惠券：</label>
+						<input id="hideExpire" name="hideExpire" type="checkbox" value="true" ${hideExpire ? 'checked' : ''}/>
 						<button type="submit" class="form-control btn btn-primary">搜索</button>
 					</form>
 				</div>
