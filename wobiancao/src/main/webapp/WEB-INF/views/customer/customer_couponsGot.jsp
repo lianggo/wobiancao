@@ -82,7 +82,7 @@
 								<!-- SIDEBAR MENU -->
 								<div class="wbc-user-coupon-list">
 									<ul class="nav">
-										<c:forEach items="${customer.couponsGot}" var="coupon" varStatus="couponStatus">
+										<c:forEach items="${coupons}" var="coupon" varStatus="couponStatus">
 											<li class="user-coupon-list-item" style="display: block; position: relative">
 												<div class="my-coupon-list" style="height: 100%">
 													<a href="/merchant/${coupon.merchant.id}">
@@ -95,6 +95,23 @@
 													</div>
 													<div class="user-coupon-list-coupon-desp coupon-line col-md-6 col-sm-6 col-xs-6">
 														<span class="coupon-line">${coupon.name}</span>
+													</div>
+												</div>
+											</li>
+										</c:forEach>
+										<c:forEach items="${expireCoupons}" var="coupon" varStatus="couponStatus">
+											<li class="user-coupon-list-item" style="display: block; position: relative">
+												<div class="my-coupon-list" style="height: 100%">
+													<a href="/merchant/${coupon.merchant.id}">
+														<div class="user-coupon-list-shop-logo col-md-3 col-sm-3 col-xs-3">
+															<img src="${coupon.merchant.logo}">
+														</div>
+													</a>
+													<div class="user-coupon-list-shop-name col-md-3 col-sm-3 col-xs-3">
+														<span class="" style="color:#ccc">${coupon.merchant.name}</span>
+													</div>
+													<div class="user-coupon-list-coupon-desp coupon-line col-md-6 col-sm-6 col-xs-6">
+														<span class="coupon-line"  style="color:#ccc">${coupon.name}</span>
 													</div>
 												</div>
 											</li>

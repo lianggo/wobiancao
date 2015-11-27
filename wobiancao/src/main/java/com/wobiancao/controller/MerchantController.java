@@ -59,11 +59,11 @@ public class MerchantController {
 //			couponsLikedMap.put(c.getId(), c);
 //		}
 //		model.addAttribute("couponsLikedMap", couponsLikedMap); // 当前用户喜欢的优惠券
-		Map<Long, Coupon> couponsGotMap = new HashMap<Long, Coupon>();
-		for (Coupon c : customer.getCouponsGot()) {
-			couponsGotMap.put(c.getId(), c);
-		}
-		model.addAttribute("couponsGotMap", couponsGotMap); // 当前用户领过的优惠券
+//		Map<Long, Coupon> couponsGotMap = new HashMap<Long, Coupon>();
+//		for (Coupon c : customer.getCouponsGot()) {
+//			couponsGotMap.put(c.getId(), c);
+//		}
+//		model.addAttribute("couponsGotMap", couponsGotMap); // 当前用户领过的优惠券
 		
 		return "merchant/merchant_details2";
 	}
